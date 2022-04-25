@@ -1,6 +1,7 @@
 var express = require('express');
 var mysql = require('mysql');
 var cors = require('cors');
+var validations = require('./validations');
 
 //inicio de express
 var app = express();
@@ -47,7 +48,7 @@ app.get('/api/productos/:id', (req,res)=>{
 });
 
 //crear un producto
-app.post('/api/productos', (req,res)=>{
+app.post('/api/productos', validations.validate(validations.crearProductoValidation), (req,res)=>{
     let data = {descripcion:req.body.descripcion, precio:req.body.precio};
     let sql = "INSERT INTO  productos SET ?";
     conexion.query(sql, data, function(error, results){
@@ -60,7 +61,7 @@ app.post('/api/productos', (req,res)=>{
 });
 
 //editar un producto
-app.put('/api/productos/:id', (req,res)=>{
+app.put('/api/productos/:id', validations.validate(validations.crearProductoValidation), (req,res)=>{
     let id = req.params.id;
     let descripcion = req.body.descripcion;
     let precio = req.body.precio;
